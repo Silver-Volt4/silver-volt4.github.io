@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silver_Volt4</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;600&family=Noto+Sans+JP&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+        }
+
+        div#bg {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+        }
+
+        div#stuff {
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+
+        div#stuff span {
+            height: 64px;
+        }
+
+        div#hello {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+
+            width: 100%;
+
+            position: relative;
+            align-items: center;
+            justify-content: center;
+        }
+
+        div#hello>* {
+            position: absolute;
+            color: white;
+            user-select: none;
+            text-align: center;
+        }
+
+        div#hello :not(.jp) {
+            font-family: "Jost", "Roboto", sans-serif;
+            font-weight: 600;
+            font-size: clamp(3em, 6em, 10vw);
+        }
+
+        div#hello .jp {
+            font-family: "Noto Sans JP", sans-serif;
+            font-size: clamp(4em, 10em, 15vw);
+            opacity: 0.3;
+            margin-bottom: 30px;
+        }
+
+
+        div#infobox {
+            display: flex;
+            flex: 2;
+            flex-direction: column;
+            text-align: center;
+            color: white;
+            font-family: "Jost", "Roboto", sans-serif;
+            font-weight: 600;
+            justify-content: center;
+        }
+
+        div#infobox h1 {
+            font-size: 3em;
+            text-shadow: #0f0f0f 2px 2px;
+        }
+
+        div#infobox p {
+            font-size: 1.5em;
+            font-weight: 300;
+            text-shadow: #0f0f0f 1px 1px;
+        }
+
+        #wave {
+            aspect-ratio: 1000/300;
+            width: 100%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-image: url("./waves.svg");
+            background-color: #001220;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="stuff">
+        <span></span>
+        <div id="hello">
+            <div class="jp">こんいちは</div>
+            <div>Hello there</div>
+        </div>
+        <div id="infobox">
+            <h1>Hello, you've found my GitHub homepage!</h1>
+            <p>I don't think I have anything worth sharing at this time.</p>
+            <p>Perhaps come back later?</p>
+        </div>
+        <span></span>
+    </div>
+
+    <div id="bg">
+        <div class="spacer" style="background-color: #0027ff;">
+        </div>
+        <div id="wave"></div>
+        <div class="spacer" style="background-color: #0027ff;">
+        </div>
+    </div>
+</body>
+
+</html>

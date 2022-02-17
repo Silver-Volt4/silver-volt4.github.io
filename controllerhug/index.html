@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hug app!</title>
+</head>
+
+<body>
+    <div id="controllerList">
+
+    </div>
+    <button onclick="hug()">Hug all controllers</button>
+</body>
+
+<script>
+    function controllerInfo(idx_n, type) {
+        var div = document.createElement("div");
+        var index = document.createElement("b");
+        var info = document.createElement("span");
+
+        div.id = "controller_" + idx_n.toString();
+        index.innerText = idx_n.toString();
+        info.innerText = type;
+
+        div.appendChild(index);
+        div.appendChild(info);
+        return div;
+    }
+    var controllers = {};
+
+    window.addEventListener("gamepadconnected", function (e) {
+        controllers[e.gamepad.index] = e.gamepad;
+        document.getElementById("controllerList").appendChild(controllerInfo(e.gamepad.index, e.gamepad.id));
+    });
+
+    window.addEventListener("gamepaddisconnected", (e) => {
+        controllers[e.gamepad.index] = null;
+        document.querySelector("#controller_" + e.gamepad.index.toString()).remove();
+    });
+
+    function hug() {
+        Object.keys(controllers).forEach(key => {
+            var c = controllers[key];
+            var vibtype = c.vibrationActuator.type;
+            c.vibrationActuator.playEffect(vibtype, {
+                startDelay: 0,
+                duration: 1000,
+                weakMagnitude: 1.0,
+                strongMagnitude: 1.0
+            });
+        });
+    }
+</script>
+
+</html>

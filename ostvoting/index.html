@@ -6,12 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer" />
+    <script src="./ogv/ogv.js"></script>
     <title>r/Sonic OST voting player</title>
 
     <script>
         let json;
         let a;
         let b;
+
+        // Safari doesn't support ogg. Fuck you Safari. And Apple.
+        var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+            navigator.userAgent &&
+            navigator.userAgent.indexOf('CriOS') == -1 &&
+            navigator.userAgent.indexOf('FxiOS') == -1;
 
         // Screw over the web browser by making it think we're loading a js file
         function load(_j) {
@@ -25,10 +32,67 @@
             let bnode = document.getElementById("b");
             anode.querySelector("h2").innerText = a[1];
             anode.querySelector("h3").innerText = a[0];
-            anode.querySelector("audio").setAttribute("src", a[3]);
             bnode.querySelector("h2").innerText = b[1];
             bnode.querySelector("h3").innerText = b[0];
-            bnode.querySelector("audio").setAttribute("src", b[3]);
+
+            if (!isSafari) {
+                // The normal fuckin behavior.
+                anode.querySelector("audio").setAttribute("src", a[3]);
+                bnode.querySelector("audio").setAttribute("src", b[3]);
+            } else {
+                // An hour of work just to make it work on safari coming up
+                document.querySelector("main").classList.remove("notsafari")
+                anode.querySelector("audio").remove()
+                window.aplayer = new OGVPlayer();
+                anode.appendChild(window.aplayer)
+                window.aplayer.src = a[3];
+                window.aplayer.addEventListener("durationchange", () => {
+                    document.querySelector("#a input").max = window.aplayer.duration
+                })
+                window.aplayer.addEventListener("timeupdate", (k) => {
+                    document.querySelector("#a input").value = window.aplayer.currentTime
+                    document.querySelector("#a input").max = window.aplayer.duration
+                })
+
+                bnode.querySelector("audio").remove()
+                window.bplayer = new OGVPlayer();
+                bnode.appendChild(window.bplayer)
+                window.bplayer.src = b[3];
+
+                window.bplayer.addEventListener("durationchange", () => {
+                    document.querySelector("#b input").max = window.bplayer.duration
+                })
+                window.bplayer.addEventListener("timeupdate", (k) => {
+                    document.querySelector("#b input").value = window.bplayer.currentTime
+                    document.querySelector("#b input").max = window.bplayer.duration
+                })
+            }
+        }
+
+        function action(which, what) {
+            let w;
+            if (which == "a") {
+                w = window.aplayer
+            } else {
+                w = window.bplayer
+            }
+
+            if (what == "play") {
+                w.play();
+            }
+
+            if (what == "seek") {
+                seek = which == "a" ? document.querySelector("#a input") : document.querySelector("#b input");
+                w.currentTime = seek.value
+            }
+
+            if (what == "stop") {
+                w.stop();
+            }
+
+            if (what == "pause") {
+                w.pause();
+            }
         }
     </script>
     <style>
@@ -42,6 +106,25 @@
             color: white;
             border-radius: 16px;
             padding: 32px;
+        }
+
+        .notsafari *.sf {
+            display: none;
+        }
+
+        .player {
+            width: auto;
+            background-color: #2d2d2d;
+            padding: 8px;
+
+        }
+
+        .player input {
+            width: 100%;
+        }
+
+        .player button {
+            font-size: 28px;
         }
 
         audio {
@@ -64,17 +147,32 @@
 </head>
 
 <body>
-    <main>
+    <main class="notsafari">
         <h1>Listen to the Sonic OSTs you're deciding on</h1>
+        <i class="sf">Note: We have detected that you're using Safari. Audio playback may be buggy. This is because
+            Safari doesn't
+            support .ogg files.</i>
         <div id="a">
             <h2></h2>
             <h3></h3>
-            <audio src="about:blank" controls></audio>
+            <audio referrer src="about:blank" controls></audio>
+            <div class="sf player">
+                <button onclick="action('a','play')">Play</button>
+                <button onclick="action('a','stop')">Stop</button>
+                <button onclick="action('a','pause')">Pause</button>
+                <input type="range" min="0" max="0" onchange="action('a','seek')">
+            </div>
         </div>
         <div id="b">
             <h2></h2>
             <h3></h3>
             <audio src="about:blank" controls></audio>
+            <div class="sf player">
+                <button onclick="action('b','play')">Play</button>
+                <button onclick="action('b','stop')">Stop</button>
+                <button onclick="action('b','pause')">Pause</button>
+                <input type="range" min="0" max="0" onchange="action('b','seek')">
+            </div>
         </div>
     </main>
 

@@ -21,7 +21,7 @@
             navigator.userAgent.indexOf('FxiOS') == -1;
 
         // Screw over the web browser by making it think we're loading a js file
-        function load(_j) {
+        async function load(_j) {
             json = _j;
             let ab = window.location.hash.split(",")
             a = parseInt(ab[0].substring(1))
@@ -40,6 +40,12 @@
                 anode.querySelector("audio").setAttribute("src", a[3]);
                 bnode.querySelector("audio").setAttribute("src", b[3]);
             } else {
+                // blob URLs for GitHub
+                let f = await fetch(new Request(a[3]))
+                a[3] = URL.createObjectURL(await f.blob())
+                f = await fetch(new Request(b[3]))
+                b[3] = URL.createObjectURL(await f.blob())
+
                 // An hour of work just to make it work on safari coming up
                 document.querySelector("main").classList.remove("notsafari")
                 anode.querySelector("audio").remove()

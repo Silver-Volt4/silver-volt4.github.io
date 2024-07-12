@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miluju Davida</title>
+</head>
+
+<body>
+    <form method="POST" action="https://llamalab.com/automate/cloud/message" class="form">
+        <input id="secret" name="secret" type="hidden" class="form-control" value="">
+        <input id="to" name="to" type="hidden" class="form-control" value="">
+        <input id="payload" name="payload" type="hidden" class="form-control" value="milujuDavida">
+    </form>
+
+    <script>
+        let url = new URL(location);
+        let params = url.searchParams;
+        document.querySelector('form > input[name="secret"]').value = params.get("token");
+        document.querySelector('form > input[name="to"]').value = params.get("email");
+        document.querySelector('form').submit()
+    </script>
+</body>
+</html>
